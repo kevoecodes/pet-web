@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/static/css/main.e1f2bb6b.css",
-    "main.js": "/static/js/main.83936f31.js",
-    "static/js/761.e10a3bd0.chunk.js": "/static/js/761.e10a3bd0.chunk.js",
+    "main.js": "/static/js/main.4a07bd49.js",
+    "static/js/761.c4ff03cd.chunk.js": "/static/js/761.c4ff03cd.chunk.js",
     "static/js/805.e06e0acd.chunk.js": "/static/js/805.e06e0acd.chunk.js",
-    "static/js/654.6c7dc039.chunk.js": "/static/js/654.6c7dc039.chunk.js",
+    "static/js/654.4dd219d8.chunk.js": "/static/js/654.4dd219d8.chunk.js",
     "static/js/357.ebdb1fd1.chunk.js": "/static/js/357.ebdb1fd1.chunk.js",
     "static/js/525.bf1f1ea1.chunk.js": "/static/js/525.bf1f1ea1.chunk.js",
     "static/js/893.36a8c1a8.chunk.js": "/static/js/893.36a8c1a8.chunk.js",
-    "static/js/565.d46c396a.chunk.js": "/static/js/565.d46c396a.chunk.js",
-    "static/js/27.a83b0589.chunk.js": "/static/js/27.a83b0589.chunk.js",
+    "static/js/565.91fe234a.chunk.js": "/static/js/565.91fe234a.chunk.js",
+    "static/js/27.50259150.chunk.js": "/static/js/27.50259150.chunk.js",
     "static/js/165.85c3d835.chunk.js": "/static/js/165.85c3d835.chunk.js",
     "static/js/346.ba47a780.chunk.js": "/static/js/346.ba47a780.chunk.js",
     "static/js/819.b10998bf.chunk.js": "/static/js/819.b10998bf.chunk.js",
-    "static/js/110.1e316155.chunk.js": "/static/js/110.1e316155.chunk.js",
+    "static/js/110.1fa64892.chunk.js": "/static/js/110.1fa64892.chunk.js",
     "static/js/443.e04a845d.chunk.js": "/static/js/443.e04a845d.chunk.js",
-    "static/js/163.970c6b35.chunk.js": "/static/js/163.970c6b35.chunk.js",
+    "static/js/163.178588af.chunk.js": "/static/js/163.178588af.chunk.js",
     "static/js/815.9dc80673.chunk.js": "/static/js/815.9dc80673.chunk.js",
     "static/js/522.cfc7b523.chunk.js": "/static/js/522.cfc7b523.chunk.js",
     "static/js/66.d1a27123.chunk.js": "/static/js/66.d1a27123.chunk.js",
@@ -36,6 +36,6 @@
   },
   "entrypoints": [
     "static/css/main.e1f2bb6b.css",
-    "static/js/main.83936f31.js"
+    "static/js/main.4a07bd49.js"
   ]
 }
