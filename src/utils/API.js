@@ -1,10 +1,6 @@
 import axios from 'axios';
 import { Config } from './Config';
-// import {message} from "antd";
-// import {EDIT_POS_TYPE} from "./constants";
 import { snackbarRef } from '../App';
-// import { setAuthToken } from '../features/userSlice'
-// import { useDispatch } from 'react-redux'
 
 function performRequest(method, payload, authenticated = true, isLogoutRequest = false) {
     return new Promise((resolve, reject) => {
@@ -202,73 +198,11 @@ export function editUserRequest(id, payload) {
     return performAuthenticatedPutRequest('api/v1/user/' + id, payload);
 }
 
-// Role Request Resources
-export function getRolesRequest() {
-    return performAuthenticatedGetRequest('api/v1/roles');
+// PET Request Resources
+export function getPetListRequest() {
+    return performAuthenticatedGetRequest('api/v1/list-pets/');
 }
 
-// BL Request Resources
-export function createBLRequest(payload) {
-    return performAuthenticatedPostRequest('api/v1/bls', payload);
-}
-
-export function getBlsRequest() {
-    return performAuthenticatedGetRequest('api/v1/bls-list/');
-}
-
-export function getBlByIdRequest(id, include_charges = false, include_timeline = false) {
-    const queryParameters = [include_charges ? `include_charges=${'true'}` : '', include_timeline ? `include_timeline=${'true'}` : '']
-        .filter(Boolean)
-        .join('&');
-
-    const method = `api/v1/bl/${id}${queryParameters ? `?${queryParameters}` : ''}`;
-    return performAuthenticatedGetRequest(method);
-}
-
-export function getBlAttachmentsRequest(id) {
-    return performAuthenticatedGetRequest('api/v1/bl-attachments?bl_id=' + id);
-}
-
-export function getChargesRequest() {
-    return performAuthenticatedGetRequest('api/v1/charges-list/');
-}
-
-export function getBlChargesRequest() {
-    return performAuthenticatedGetRequest('api/v1/bl-charges-list/');
-}
-
-export function createBLChargeRequest(payload) {
-    return performAuthenticatedPostRequest('api/v1/bl-charges', payload);
-}
-
-export function getBlChargeByIdRequest(id) {
-    return performAuthenticatedGetRequest('api/v1/bl-charge/' + id);
-}
-
-export function updateBlChargeRequest(id, payload) {
-    return performAuthenticatedPutRequest('api/v1/bl-charge/' + id, payload);
-}
-
-export function getBlChargeAttachmentRequest(id) {
-    return performAuthenticatedGetRequest('api/v1/bl-charge-attachments?bl_charge_id=' + id);
-}
-
-// Voucher Request Resources
-export function createVoucherRequest(payload) {
-    return performAuthenticatedPostRequest('api/v1/vouchers', payload);
-}
-
-export function getVouchersRequest() {
-    return performAuthenticatedGetRequest('api/v1/vouchers-list/');
-}
-
-export function getVoucherByIdRequest(id) {
-    return performAuthenticatedGetRequest('api/v1/voucher/' + id);
-}
-export function updateVoucherRequest(id, payload) {
-    return performAuthenticatedPutRequest('api/v1/voucher/' + id, payload);
-}
-
-export function getVoucherAttachmentsRequest(id) {
-    return performAuthenticatedGetRequest('api/v1/voucher-attachments?voucher_id=' + id);
+export function addPetRequest(payload) {
+    return performAuthenticatedPostRequest('api/v1/pets', payload);
 }

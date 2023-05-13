@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { getPetListRequest } from '../../utils/API';
+import MainCard from '../../components/MainCard';
 import {
     Button,
     Grid,
@@ -12,31 +16,33 @@ import {
     TablePagination,
     TableRow
 } from '@mui/material';
-import MainCard from '../../components/MainCard';
-import { renderDateTime } from '../../functions/common';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { getPetsList, renderDateTime, renderDeviceStatus } from '../../functions/common';
 import PendingIcon from '@mui/icons-material/Pending';
+import StyledMenu from '../../components/StyledMenu';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import VerifiedIcon from '@mui/icons-material/Verified';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import { getRolesRequest, getUserListRequest } from '../../utils/API';
 
-const RolesList = () => {
-    const [roles, setRoles] = useState([]);
+const ListPets = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [pets, setPets] = useState([]);
+    const [rowPet, setRowPet] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const navigate = useNavigate();
 
+    const open = Boolean(anchorEl);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
+    const navigateToAddPet = () => {
+        navigate('add-pet');
+    };
 
-    const navigateToAddRole = () => {
-        navigate('add-role');
+    const navigateToPetDetail = (id) => {
+        navigate('edit-user/' + id);
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -44,19 +50,16 @@ const RolesList = () => {
         setPage(0);
     };
 
-    const getRoles = () => {
-        getRolesRequest()
-            .then((res) => {
-                console.log(res);
-                setRoles(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const handleClick = (event, pet) => {
+        setRowPet(pet);
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
     };
 
     useEffect(() => {
-        getRoles();
+        getPetsList(setPets);
     }, []);
 
     return (
@@ -65,11 +68,11 @@ const RolesList = () => {
                 title={
                     <>
                         <Grid container spacing={3} alignItems="center">
-                            <Grid item>All Roles</Grid>
+                            <Grid item>All Users</Grid>
 
                             <Grid item xs={12} md={6} lg={4} sx={{ ml: 'auto' }}>
-                                <Button variant="contained" endIcon={<AddOutlinedIcon />} onClick={navigateToAddRole}>
-                                    Add Role
+                                <Button variant="contained" endIcon={<AddOutlinedIcon />} onClick={navigateToAddPet}>
+                                    Add Pet
                                 </Button>
                             </Grid>
                         </Grid>
@@ -82,12 +85,14 @@ const RolesList = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Created At</TableCell>
-                                    <TableCell>Title</TableCell>
+                                    <TableCell>Pet Name</TableCell>
+                                    <TableCell>Device No</TableCell>
+                                    <TableCell>Status</TableCell>
                                     <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {roles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, idx) => {
+                                {pets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pet, idx) => {
                                     // if (filter_worthy(company.verification_status)) {
                                     return (
                                         <TableRow
@@ -96,8 +101,10 @@ const RolesList = () => {
                                             key={idx}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                            <TableCell>{renderDateTime(user.created_at)}</TableCell>
-                                            <TableCell>{user.title}</TableCell>
+                                            <TableCell>{renderDateTime(pet.created_at)}</TableCell>
+                                            <TableCell>{pet.name}</TableCell>
+                                            <TableCell>{pet.device_no}</TableCell>
+                                            <TableCell>{renderDeviceStatus(pet.active)}</TableCell>
                                             <TableCell>
                                                 <div>
                                                     <IconButton
@@ -107,10 +114,34 @@ const RolesList = () => {
                                                         aria-expanded={open ? 'true' : undefined}
                                                         disableElevation
                                                         aria-haspopup="true"
-                                                        // onClick={(e) => handleClick(e, company)}
+                                                        onClick={(e) => handleClick(e, pet)}
                                                     >
                                                         <PendingIcon />
                                                     </IconButton>
+
+                                                    <StyledMenu
+                                                        id="demo-customized-menu"
+                                                        anchorEl={anchorEl}
+                                                        open={open}
+                                                        onClose={handleClose}
+                                                        MenuListProps={{
+                                                            'aria-labelledby': 'demo-customized-menu'
+                                                        }}
+                                                    >
+                                                        <MenuItem
+                                                            onClick={() => {
+                                                                // navigateToUserDetail(rowUser.id);
+                                                            }}
+                                                        >
+                                                            <VisibilityIcon style={{ fontSize: 25, color: 'green' }} />
+                                                            Edit
+                                                        </MenuItem>
+
+                                                        <MenuItem onClick={handleClose} disableRipple>
+                                                            <DeleteForeverIcon style={{ fontSize: 25, color: 'red' }} />
+                                                            Delete
+                                                        </MenuItem>
+                                                    </StyledMenu>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -123,7 +154,7 @@ const RolesList = () => {
                     <TablePagination
                         rowsPerPageOptions={[10, 15, 20]}
                         component="div"
-                        count={roles.length}
+                        count={pets.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -135,4 +166,4 @@ const RolesList = () => {
     );
 };
 
-export default RolesList;
+export default ListPets;

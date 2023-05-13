@@ -1,19 +1,12 @@
 import { BL_CHARGE_STATUS, BL_STATUS, COMPANY_VERIFICATION_STATUS } from '../utils/constants';
 import { Chip } from '@mui/material';
-import { getRolesRequest } from '../utils/API';
+import { Config } from '../utils/Config';
+import { getPetListRequest } from '../utils/API';
 
-export const renderCompanyVerificationStatus = (status, include = false) => {
-    // const pre = `${include ? 'Verification'}`
-    if (status === COMPANY_VERIFICATION_STATUS.PENDING) return <Chip color="primary">Pending</Chip>;
-    if (status === COMPANY_VERIFICATION_STATUS.VERIFIED) return <Chip color="success">Verified</Chip>;
-    if (status === COMPANY_VERIFICATION_STATUS.REJECTED) return <Chip color="error">Rejected</Chip>;
-};
-
-export const renderBillOfLoadingStatus = (status, include = false) => {
-    // const pre = `${include ? 'Verification'}`
-    if (status === BL_STATUS.PENDING) return <Chip color="secondary" label={'Pending'} />;
-    else if (status === BL_STATUS.ONPROGRESS) return <Chip color="primary" label="On Progress" />;
-    else if (status === BL_STATUS.COMPLETE) return <Chip color="success" label="Complete" />;
+export const renderDeviceStatus = (status) => {
+    console.log('Pet', status === false);
+    if (status === true) return <Chip color="success" label="Active" />;
+    if (status === false) return <Chip color="error" label="Inactive" />;
 };
 
 export const renderBlChargeStatus = (status, include = false) => {
@@ -30,18 +23,23 @@ export const renderDateTime = (datetimestring) => {
     return dateTime.toLocaleString();
 };
 
-export const getRoleOptions = (setRoleOptions) => {
-    getRolesRequest()
+export const currencyFormatter = (_amount) => {
+    const formattedAmount = _amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return formattedAmount;
+};
+
+export const imageServe = (_name) => {
+    return `${Config.mediaURL}images/${_name}`;
+};
+
+export const getPetsList = (setPets, afterFunc = (e) => {}) => {
+    getPetListRequest()
         .then((res) => {
             console.log(res);
-            setRoleOptions(res);
+            setPets(res.results);
+            afterFunc(res.results);
         })
         .catch((err) => {
             console.log(err);
         });
-};
-
-export const currencyFormatter = (_amount) => {
-    const formattedAmount = _amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    return formattedAmount;
 };

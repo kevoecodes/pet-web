@@ -8,7 +8,6 @@ import MainCard from '../../components/MainCard';
 import { Box } from '@mui/material';
 
 const EditUser = () => {
-    const [role_options, setRoleOptions] = useState([]);
     const [initialValues, setInitialValues] = useState(null);
     const [loading, setLoading] = useState(false);
     const [page_loading, setPageLoading] = useState(true);
@@ -38,7 +37,7 @@ const EditUser = () => {
                     last_name: res.last_name,
                     cellphone: res.cellphone,
                     email: res.email,
-                    role: res.role !== null ? res.role.id : ''
+                    role: res.role !== null ? res.role : ''
                 });
                 setPageLoading(false);
             })
@@ -50,7 +49,6 @@ const EditUser = () => {
     };
 
     useEffect(() => {
-        getRoleOptions(setRoleOptions);
         getUser();
     }, []);
 
@@ -61,7 +59,6 @@ const EditUser = () => {
                     {!page_loading && (
                         <UserForm
                             initialValues={initialValues}
-                            role_options={role_options}
                             onSubmitForm={(values) => editUser(values)}
                             initial_role={initialValues.role}
                             loading={loading}

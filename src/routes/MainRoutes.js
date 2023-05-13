@@ -15,7 +15,6 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 
 // render - utilities
 const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
-const RolesList = Loadable(lazy(() => import('pages/users-management/RolesList')));
 const UsersList = Loadable(lazy(() => import('pages/users-management/UsersList')));
 const Color = Loadable(lazy(() => import('pages/components-overview/Color')));
 const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
@@ -23,10 +22,11 @@ const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons'
 
 //  user management routes  //
 const CreateUser = Loadable(lazy(() => import('pages/users-management/CreateUser')));
-const AddRole = Loadable(lazy(() => import('pages/users-management/AddRole')));
 const EditUser = Loadable(lazy(() => import('pages/users-management/EditUser')));
 
 const MapPage = Loadable(lazy(() => import('pages/navigations-manager/MapPage')));
+const ListPets = Loadable(lazy(() => import('pages/navigations-manager/ListPets')));
+const AddPet = Loadable(lazy(() => import('pages/navigations-manager/AddPet')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -68,15 +68,20 @@ const MainRoutes = {
             ]
         },
         {
-            path: '/roles',
+            path: '/pets',
+            // element: <UsersList />,
             children: [
                 {
                     path: '',
-                    element: <RolesList />
+                    element: <ListPets />
                 },
                 {
-                    path: 'add-role',
-                    element: <AddRole />
+                    path: 'add-pet',
+                    element: <AddPet />
+                },
+                {
+                    path: 'edit-user/:user_id',
+                    element: <EditUser />
                 }
             ]
         },
