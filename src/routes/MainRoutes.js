@@ -27,6 +27,7 @@ const EditUser = Loadable(lazy(() => import('pages/users-management/EditUser')))
 const MapPage = Loadable(lazy(() => import('pages/navigations-manager/MapPage')));
 const ListPets = Loadable(lazy(() => import('pages/navigations-manager/ListPets')));
 const AddPet = Loadable(lazy(() => import('pages/navigations-manager/AddPet')));
+const EditPet = Loadable(lazy(() => import('pages/navigations-manager/EditPet')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -80,8 +81,8 @@ const MainRoutes = {
                     element: <AddPet />
                 },
                 {
-                    path: 'edit-user/:user_id',
-                    element: <EditUser />
+                    path: 'edit-pet/:pet_id',
+                    element: <EditPet />
                 }
             ]
         },

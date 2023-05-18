@@ -13,16 +13,17 @@ import {
     TableRow
 } from '@mui/material';
 import MainCard from '../../components/MainCard';
-import { renderDateTime } from '../../functions/common';
+import { getPetsList, renderDateTime, renderRole } from '../../functions/common';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PendingIcon from '@mui/icons-material/Pending';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import VerifiedIcon from '@mui/icons-material/Verified';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import { getUserListRequest } from '../../utils/API';
+import { deleteUserRequest, getUserListRequest } from '../../utils/API';
 import StyledMenu from '../../components/StyledMenu';
+import snack from '../../functions/snack';
+import DeleteConfirmModal from '../../components/DeleteConfirmModal';
 
 const UsersList = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -30,6 +31,7 @@ const UsersList = () => {
     const [rowUser, setRowUser] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [delete_modal_open, setDeleteModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -68,6 +70,24 @@ const UsersList = () => {
             .catch((err) => {
                 console.log(err);
             });
+    };
+
+    const deleteUser = () => {
+        deleteUserRequest(rowUser.id)
+            .then((res) => {
+                snack.success('User deleted successfully');
+                setDeleteModalOpen(false);
+                getUserList();
+            })
+            .catch((err) => {
+                console.log(err);
+                snack.error('Failed to delete user');
+            });
+    };
+
+    const openDeleteModal = () => {
+        setAnchorEl(null);
+        setDeleteModalOpen(true);
     };
 
     useEffect(() => {
@@ -118,7 +138,7 @@ const UsersList = () => {
                                                 {user.first_name} {user.last_name}
                                             </TableCell>
                                             <TableCell>{user.email}</TableCell>
-                                            <TableCell>{user.role.title}</TableCell>
+                                            <TableCell>{renderRole(user.role)}</TableCell>
                                             <TableCell>
                                                 <div>
                                                     <IconButton
@@ -151,7 +171,7 @@ const UsersList = () => {
                                                             Edit
                                                         </MenuItem>
 
-                                                        <MenuItem onClick={handleClose} disableRipple>
+                                                        <MenuItem onClick={openDeleteModal} disableRipple>
                                                             <DeleteForeverIcon style={{ fontSize: 25, color: 'red' }} />
                                                             Delete
                                                         </MenuItem>
@@ -176,6 +196,12 @@ const UsersList = () => {
                     />
                 </Paper>
             </MainCard>
+            <DeleteConfirmModal
+                isModalOpen={delete_modal_open}
+                setIsModalOpen={setDeleteModalOpen}
+                onDelete={deleteUser}
+                message={rowUser != null && `Are you sure you want to delete ${rowUser.first_name}`}
+            />
         </>
     );
 };

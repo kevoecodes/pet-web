@@ -8,7 +8,6 @@ import { useState } from 'react';
 const UserForm = ({ onSubmitForm, role_options, loading, initial_role = '', initialValues = null }) => {
     const [role, setRole] = useState(initial_role);
     const [role_error, setRoleError] = useState(false);
-    console.log('Initial Values', initialValues);
 
     return (
         <>

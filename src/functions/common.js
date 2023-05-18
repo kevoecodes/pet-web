@@ -9,6 +9,11 @@ export const renderDeviceStatus = (status) => {
     if (status === false) return <Chip color="error" label="Inactive" />;
 };
 
+export const renderRole = (status) => {
+    if (status === 0) return <Chip color="primary" label="Admin" />;
+    if (status === 1) return <Chip color="success" label="User" />;
+};
+
 export const renderBlChargeStatus = (status, include = false) => {
     // const pre = `${include ? 'Verification'}`
     if (status === BL_CHARGE_STATUS.PENDING) return <Chip color="secondary" label={'Pending'} />;

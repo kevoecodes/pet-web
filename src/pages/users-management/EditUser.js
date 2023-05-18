@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import UserForm from './components/UserForm';
 import { useEffect, useState } from 'react';
-import { getRoleOptions } from '../../functions/common';
 import { editUserRequest, getUserByIDRequest } from '../../utils/API';
 import snack from '../../functions/snack';
 import MainCard from '../../components/MainCard';

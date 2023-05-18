@@ -194,6 +194,10 @@ export function getUserByIDRequest(id) {
     return performAuthenticatedGetRequest('api/v1/user/' + id);
 }
 
+export function deleteUserRequest(id) {
+    return performAuthenticatedDeleteRequest('api/v1/user/' + id);
+}
+
 export function editUserRequest(id, payload) {
     return performAuthenticatedPutRequest('api/v1/user/' + id, payload);
 }
@@ -205,4 +209,16 @@ export function getPetListRequest() {
 
 export function addPetRequest(payload) {
     return performAuthenticatedPostRequest('api/v1/pets', payload);
+}
+
+export function editPetRequest(id, payload) {
+    return performAuthenticatedPutRequest('api/v1/pet/' + id, payload);
+}
+
+export function getPetByIdRequest(id) {
+    return performAuthenticatedGetRequest('api/v1/pet/' + id);
+}
+
+export function deletePetRequest(id) {
+    return performAuthenticatedDeleteRequest('api/v1/pet/' + id);
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { getPetListRequest } from '../../utils/API';
+import { deletePetRequest } from '../../utils/API';
 import MainCard from '../../components/MainCard';
 import {
     Button,
@@ -22,11 +22,14 @@ import StyledMenu from '../../components/StyledMenu';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import DeleteConfirmModal from '../../components/DeleteConfirmModal';
+import snack from '../../functions/snack';
 
 const ListPets = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [pets, setPets] = useState([]);
     const [rowPet, setRowPet] = useState(null);
+    const [delete_modal_open, setDeleteModalOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -42,7 +45,7 @@ const ListPets = () => {
     };
 
     const navigateToPetDetail = (id) => {
-        navigate('edit-user/' + id);
+        navigate('edit-pet/' + id);
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -56,6 +59,23 @@ const ListPets = () => {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const openDeleteModal = () => {
+        setAnchorEl(null);
+        setDeleteModalOpen(true);
+    };
+
+    const deletePet = () => {
+        deletePetRequest(rowPet.id)
+            .then((res) => {
+                snack.success('Pet deleted successfully');
+                setDeleteModalOpen(false);
+                getPetsList(setPets);
+            })
+            .catch((err) => {
+                console.log(err);
+                snack.error('Failed to delete user');
+            });
     };
 
     useEffect(() => {
@@ -130,14 +150,14 @@ const ListPets = () => {
                                                     >
                                                         <MenuItem
                                                             onClick={() => {
-                                                                // navigateToUserDetail(rowUser.id);
+                                                                navigateToPetDetail(rowPet.id);
                                                             }}
                                                         >
                                                             <VisibilityIcon style={{ fontSize: 25, color: 'green' }} />
                                                             Edit
                                                         </MenuItem>
 
-                                                        <MenuItem onClick={handleClose} disableRipple>
+                                                        <MenuItem onClick={openDeleteModal} disableRipple>
                                                             <DeleteForeverIcon style={{ fontSize: 25, color: 'red' }} />
                                                             Delete
                                                         </MenuItem>
@@ -162,6 +182,12 @@ const ListPets = () => {
                     />
                 </Paper>
             </MainCard>
+            <DeleteConfirmModal
+                isModalOpen={delete_modal_open}
+                setIsModalOpen={setDeleteModalOpen}
+                onDelete={deletePet}
+                message={rowPet != null && `Are you sure you want to delete ${rowPet.name}`}
+            />
         </>
     );
 };
