@@ -222,3 +222,7 @@ export function getPetByIdRequest(id) {
 export function deletePetRequest(id) {
     return performAuthenticatedDeleteRequest('api/v1/pet/' + id);
 }
+
+export function getPetLocationsRequest(pet_id) {
+    return performAuthenticatedGetRequest('api/v1/list-pet-locations/?pet_id=' + pet_id);
+}

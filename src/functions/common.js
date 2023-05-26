@@ -3,6 +3,8 @@ import { Chip } from '@mui/material';
 import { Config } from '../utils/Config';
 import { getPetListRequest } from '../utils/API';
 
+const colors = ['#ff0707', '#ffdd00', '#99f600', '#ff00dd', '#00ffde', '#07968a'];
+
 export const renderDeviceStatus = (status) => {
     console.log('Pet', status === false);
     if (status === true) return <Chip color="success" label="Active" />;
@@ -41,8 +43,9 @@ export const getPetsList = (setPets, afterFunc = (e) => {}) => {
     getPetListRequest()
         .then((res) => {
             console.log(res);
-            setPets(res.results);
-            afterFunc(res.results);
+            const results = res.results.map((item, idx) => ({ ...item, color: colors[idx] }));
+            setPets(results);
+            afterFunc(results);
         })
         .catch((err) => {
             console.log(err);
