@@ -24,7 +24,8 @@ const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons'
 const CreateUser = Loadable(lazy(() => import('pages/users-management/CreateUser')));
 const EditUser = Loadable(lazy(() => import('pages/users-management/EditUser')));
 
-const MapPage = Loadable(lazy(() => import('pages/navigations-manager/MapPage')));
+const PetHistory = Loadable(lazy(() => import('pages/navigations-manager/PetHistory')));
+const PetTracker = Loadable(lazy(() => import('pages/navigations-manager/PetTracker')));
 const ListPets = Loadable(lazy(() => import('pages/navigations-manager/ListPets')));
 const AddPet = Loadable(lazy(() => import('pages/navigations-manager/AddPet')));
 const EditPet = Loadable(lazy(() => import('pages/navigations-manager/EditPet')));
@@ -37,18 +38,11 @@ const MainRoutes = {
     children: [
         {
             path: '',
-            element: (
-                <Result
-                    style={{ height: '100vh' }}
-                    icon={<SmileOutlined />}
-                    title="Pet real time tracking page under construction!"
-                    // extra={<Button type="primary">Next</Button>}
-                />
-            )
+            element: <PetTracker />
         },
         {
             path: 'history',
-            element: <MapPage />
+            element: <PetHistory />
         },
         {
             path: '/users',

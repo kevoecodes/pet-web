@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { paths } from '../extra-pages/data';
 import { Grid, Paper } from '@mui/material';
-import { Segmented, FloatButton, Spin } from 'antd';
+import { Segmented, Spin } from 'antd';
 import MainCard from '../../components/MainCard';
 import { getPetsList, imageServe } from '../../functions/common';
 import { getPetLocationsRequest } from '../../utils/API';
 import PetList from './components/PetList';
 import { Config } from '../../utils/Config';
 
-const MapWithRoute = () => {
+const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
     const [map_loaded, setMapLoaded] = useState();
     const [selected, setSelected] = useState('Population');
     const [pets, setPets] = useState([]);
@@ -125,14 +124,14 @@ const MapWithRoute = () => {
             const map = mapRef.current;
             const maps = mapsRef.current;
             renderPetLocation(google, map, maps, pets).then((r) => {
-                if (opened_socket === null) {
+                if (opened_socket === null && real_time) {
                     setOpenedSocker('Hello');
-                    openPetSocket(google, map, maps);
+                    openPetSocket(google, map, maps, pets);
                 }
             });
         }
     };
-    const openPetSocket = (google, map, maps) => {
+    const openPetSocket = (google, map, maps, pets) => {
         let socket = new WebSocket(Config.socketURL + 'ws/ws-pet-tracker');
         setOpenedSocker(socket);
 
@@ -144,7 +143,7 @@ const MapWithRoute = () => {
             console.log('Data:', data);
             if (data !== null) {
                 let pet_location = data.pet_location;
-                socketManager(pet_location, google, map, maps);
+                socketManager(pet_location, google, map, maps, pets);
             }
         };
 
@@ -153,19 +152,19 @@ const MapWithRoute = () => {
             if (event.wasClean) {
                 // Connection closed cleanly, code=${event.code} reason=${event.reason}`);
             } else {
-                openPetSocket();
+                openPetSocket(google, map, maps, pets);
             }
         };
 
         socket.onerror = function (error) {
             // console.log('Error ' + id);
-            openPetSocket();
+            openPetSocket(google, map, maps, pets);
         };
     };
 
-    const socketManager = (pet_location, google, map, maps) => {
+    const socketManager = (pet_location, google, map, maps, pets_list) => {
         console.log('Here at socketManager', polyLines);
-        if (selected === 'Population') {
+        if (selected === 'Route') {
             setPolyLines((prevPolyLines) => {
                 const updatedPolyLines = prevPolyLines.map((pol) => {
                     if (pol.pet_id === pet_location.pet.id) {
@@ -180,6 +179,7 @@ const MapWithRoute = () => {
                 return updatedPolyLines;
             });
         } else {
+            console.log('Color', pets_list.find((item) => item.id === pet_location.pet.id).color);
             const point = new google.maps.Marker({
                 position: { lat: pet_location.latitudes, lng: pet_location.longitudes },
                 map: map,
@@ -187,7 +187,7 @@ const MapWithRoute = () => {
                 icon: {
                     path: maps.SymbolPath.CIRCLE,
                     scale: 3,
-                    fillColor: color,
+                    fillColor: pets_list.find((item) => item.id === pet_location.pet.id).color,
                     fillOpacity: 1,
                     strokeWeight: 0
                 }
@@ -206,7 +206,7 @@ const MapWithRoute = () => {
                 title={
                     <>
                         <Grid container spacing={3} alignItems="center">
-                            <Grid item>Pet History</Grid>
+                            <Grid item>{title}</Grid>
                             <Grid item xs={12} md={6} lg={4} sx={{ ml: 'auto' }}>
                                 <PetList pets={pets} setPet={setPet} current_pet={pet} />
                             </Grid>

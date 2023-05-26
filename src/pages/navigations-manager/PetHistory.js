@@ -7,3 +7,5 @@ const PetHistory = () => {
         </>
     );
 };
+
+export default PetHistory;
