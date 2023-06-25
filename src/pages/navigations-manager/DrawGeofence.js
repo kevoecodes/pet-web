@@ -117,7 +117,7 @@ const DrawGeofence = () => {
                 <Spin tip="Constructing data..." spinning={false}>
                     <Paper>
                         <div style={{ height: '700px', width: '100%' }}>
-                            <GoogleMap mapContainerClassName={'App-map'} zoom={12} center={{ lat: -6.810583, lng: 39.257459 }}>
+                            <GoogleMap mapContainerClassName={'App-map'} zoom={20} center={{ lat: -6.804358, lng: 39.222483 }}>
                                 <DrawingManager
                                     onReady={handleDrawingManagerReady}
                                     options={options}

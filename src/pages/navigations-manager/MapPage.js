@@ -223,7 +223,7 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
                         <div style={{ height: '70vh', width: '100%' }}>
                             <GoogleMapReact
                                 // bootstrapURLKeys={{ key: '', libraries: ['drawing'] }}
-                                defaultCenter={{ lat: -6.810583, lng: 39.257459 }}
+                                defaultCenter={{ lat: -6.804358, lng: 39.222483 }}
                                 defaultZoom={20}
                                 yesIWantToUseGoogleMapApiInternals
                                 onGoogleApiLoaded={({ map, maps }) => {
