@@ -7,6 +7,7 @@ import { getPetsList, imageServe } from '../../functions/common';
 import { getPetLocationsRequest } from '../../utils/API';
 import PetList from './components/PetList';
 import { Config } from '../../utils/Config';
+import { DrawingManager } from '@react-google-maps/api';
 
 const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
     const [map_loaded, setMapLoaded] = useState();
@@ -221,7 +222,7 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
                     <Paper>
                         <div style={{ height: '70vh', width: '100%' }}>
                             <GoogleMapReact
-                                bootstrapURLKeys={{ key: 'AIzaSyDQz72mL0bI2Li-VJ2AAyFl78sB4UbQIMk' }}
+                                // bootstrapURLKeys={{ key: '', libraries: ['drawing'] }}
                                 defaultCenter={{ lat: -6.810583, lng: 39.257459 }}
                                 defaultZoom={20}
                                 yesIWantToUseGoogleMapApiInternals
@@ -230,7 +231,21 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
                                     mapsRef.current = maps;
                                     setMapLoaded(true);
                                 }}
-                            />
+                            >
+                                {map_loaded && (
+                                    <DrawingManager
+                                        // onReady={handleDrawingManagerReady}
+                                        onLoad={(e) => {
+                                            console.log('Ready', e);
+                                        }}
+                                        drawingMode={'polygon'}
+                                        drawingControlOptions={{
+                                            position: window.google.maps.ControlPosition.TOP_CENTER,
+                                            drawingModes: [window.google.maps.drawing.OverlayType.POLYGON]
+                                        }}
+                                    />
+                                )}
+                            </GoogleMapReact>
                         </div>
                     </Paper>
                 </Spin>

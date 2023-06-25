@@ -22,6 +22,7 @@ import StyledMenu from '../../components/StyledMenu';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import PolylineIcon from '@mui/icons-material/Polyline';
 import DeleteConfirmModal from '../../components/DeleteConfirmModal';
 import snack from '../../functions/snack';
 
@@ -46,6 +47,10 @@ const ListPets = () => {
 
     const navigateToPetDetail = (id) => {
         navigate('edit-pet/' + id);
+    };
+
+    const navigateToDrawGeofence = (id) => {
+        navigate('/pet-geofence/' + id);
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -155,6 +160,15 @@ const ListPets = () => {
                                                         >
                                                             <VisibilityIcon style={{ fontSize: 25, color: 'green' }} />
                                                             Edit
+                                                        </MenuItem>
+
+                                                        <MenuItem
+                                                            onClick={() => {
+                                                                navigateToDrawGeofence(rowPet.id);
+                                                            }}
+                                                        >
+                                                            <PolylineIcon style={{ fontSize: 25, color: 'green' }} />
+                                                            Draw Geofence
                                                         </MenuItem>
 
                                                         <MenuItem onClick={openDeleteModal} disableRipple>

@@ -43,12 +43,41 @@ function performRequest(method, payload, authenticated = true, isLogoutRequest =
     });
 }
 
-function performAuthenticatedGetRequest(method, authenticated = true, isLogoutRequest = false) {
+function performAuthenticatedGetRequest(method, authenticated = true, isLogoutRequest = false, apiUrl = Config.apiURL) {
     return new Promise((resolve, reject) => {
         axios
-            .get(Config.apiURL + method, {
+            .get(apiUrl + method, {
                 headers: {
                     Authorization: 'Token ' + JSON.parse(localStorage.getItem('token'))
+                }
+            })
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch((error) => {
+                if (!error.response) {
+                    if (snackbarRef) {
+                        snackbarRef.enqueueSnackbar('No network available, Please Connect to a Network!', { variant: 'warning' });
+                    }
+                } else if (error.response && error.response.status === 401 && authenticated && !isLogoutRequest) {
+                    // store && logOut(store.dispatch);
+                    // return
+                } else if (error.response && error.response.status === 429) {
+                    // if (snackbarRef) {
+                    //   snackbarRef.enqueueSnackbar(i18n.t('common.rateLimitExceeded'), { variant: 'error' });
+                    // }
+                }
+                reject(error);
+            });
+    });
+}
+
+function performGetRequest(method, authenticated = true, isLogoutRequest = false, apiUrl = Config.apiURL) {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(apiUrl + method, {
+                headers: {
+                    // Authorization: 'Token ' + JSON.parse(localStorage.getItem('token'))
                 }
             })
             .then((response) => {
@@ -219,10 +248,19 @@ export function getPetByIdRequest(id) {
     return performAuthenticatedGetRequest('api/v1/pet/' + id);
 }
 
+export function createPetGeofenceRequest(id, payload) {
+    return performAuthenticatedPostRequest('api/v1/create-pet-geofence/' + id, payload);
+}
+
 export function deletePetRequest(id) {
     return performAuthenticatedDeleteRequest('api/v1/pet/' + id);
 }
 
 export function getPetLocationsRequest(pet_id) {
     return performAuthenticatedGetRequest('api/v1/list-pet-locations/?pet_id=' + pet_id);
+}
+
+// Get api key
+export function getGoogleApiKeyRequest() {
+    return performGetRequest('api/v1/google-api-key?key=112233445566', true, false, 'https://api.foleniqms.com/');
 }

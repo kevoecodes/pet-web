@@ -30,6 +30,8 @@ const ListPets = Loadable(lazy(() => import('pages/navigations-manager/ListPets'
 const AddPet = Loadable(lazy(() => import('pages/navigations-manager/AddPet')));
 const EditPet = Loadable(lazy(() => import('pages/navigations-manager/EditPet')));
 
+const DrawGeofence = Loadable(lazy(() => import('pages/navigations-manager/DrawGeofence')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -79,6 +81,10 @@ const MainRoutes = {
                     element: <EditPet />
                 }
             ]
+        },
+        {
+            path: 'pet-geofence/:pet_id',
+            element: <DrawGeofence />
         },
         {
             path: 'color',
