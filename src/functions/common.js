@@ -35,8 +35,8 @@ export const currencyFormatter = (_amount) => {
     return formattedAmount;
 };
 
-export const imageServe = (_name) => {
-    return `${Config.mediaURL}images/${_name}`;
+export const imageServe = (_name, image_type = 'normal') => {
+    return `${Config.mediaURL}images/${_name}?image_type=${image_type}`;
 };
 
 export const getPetsList = (setPets, afterFunc = (e) => {}) => {

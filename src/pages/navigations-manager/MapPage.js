@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { Grid, Paper } from '@mui/material';
 import { Segmented, Spin } from 'antd';
 import MainCard from '../../components/MainCard';
-import { getPetsList, imageServe } from '../../functions/common';
+import { getPetsList, imageServe, renderDateTime } from '../../functions/common';
 import { getPetLocationsRequest } from '../../utils/API';
 import PetList from './components/PetList';
 import { Config } from '../../utils/Config';
@@ -91,7 +91,7 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
                 new google.maps.Marker({
                     position: { lat: path.latitudes, lng: path.longitudes },
                     map: map,
-                    title: 'Start',
+                    title: `At ${renderDateTime(path.created_at)}`,
                     icon: {
                         path: maps.SymbolPath.CIRCLE,
                         scale: 3,
@@ -163,6 +163,19 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
         };
     };
 
+    const changeLastPetIconToDot = (maps, color) => {
+        setMarkers((prevState) => {
+            prevState[prevState.length - 1].setIcon({
+                path: maps.SymbolPath.CIRCLE,
+                scale: 3,
+                fillColor: color,
+                fillOpacity: 1,
+                strokeWeight: 0
+            });
+            return prevState;
+        });
+    };
+
     const socketManager = (pet_location, google, map, maps, pets_list) => {
         console.log('Here at socketManager', polyLines);
         if (selected === 'Route') {
@@ -181,18 +194,23 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
             });
         } else {
             console.log('Color', pets_list.find((item) => item.id === pet_location.pet.id).color);
+            changeLastPetIconToDot(maps, pets_list.find((item) => item.id === pet_location.pet.id).color);
+            const icon = {
+                url: imageServe(pet_location.pet.icon, 'circle'),
+                scaledSize: new google.maps.Size(30, 30),
+                anchor: new google.maps.Point(10, 10),
+                shape: {
+                    coords: [10, 10, 10],
+                    type: 'circle'
+                }
+            };
             const point = new google.maps.Marker({
                 position: { lat: pet_location.latitudes, lng: pet_location.longitudes },
                 map: map,
-                title: 'Start',
-                icon: {
-                    path: maps.SymbolPath.CIRCLE,
-                    scale: 3,
-                    fillColor: pets_list.find((item) => item.id === pet_location.pet.id).color,
-                    fillOpacity: 1,
-                    strokeWeight: 0
-                }
+                title: `At ${renderDateTime(pet_location.created_at)}`,
+                icon: icon
             });
+            map.panTo(new google.maps.LatLng(pet_location.latitudes, pet_location.longitudes));
             setMarkers((prevState) => [...prevState, point]);
         }
     };
@@ -224,7 +242,7 @@ const MapWithRoute = ({ real_time = false, title = 'Pet History' }) => {
                             <GoogleMapReact
                                 // bootstrapURLKeys={{ key: '', libraries: ['drawing'] }}
                                 defaultCenter={{ lat: -6.804358, lng: 39.222483 }}
-                                defaultZoom={20}
+                                defaultZoom={17}
                                 yesIWantToUseGoogleMapApiInternals
                                 onGoogleApiLoaded={({ map, maps }) => {
                                     mapRef.current = map;
